@@ -1,23 +1,20 @@
 package com.oradian.infra.serverbanner
-package slant
 
 object Slant {
   val AllowedChars: Set[Char] =
     Set('-', '_') ++ ('A' to 'Z') ++ ('a' to 'z') ++ ('0' to '9')
 
-  private[slant] object Glyph {
+  private[serverbanner] object Glyph {
     final val Height = 6
     final val OneMaxWidth = 13
     final val TwoWidth = 23
 
     private[this] final val BufferRowLength = TwoWidth * AllowedChars.size + 1
     private[this] val buffer: Array[Byte] = {
-      val len = BufferRowLength * Height * (AllowedChars.size + 1)
-      val tmp = new Array[Byte](len)
-      getClass.getResourceAsStream("/matrix.txt")
-        .read(tmp)
-        .ensuring(_ == len, "Incompatible buffer size (read from slant.txt)")
-      tmp
+      val totalBufferLength = BufferRowLength * Height * (AllowedChars.size + 1)
+      new Array[Byte](totalBufferLength) ensuring { buffer =>
+        getClass.getResourceAsStream("slant.txt").read(buffer) == totalBufferLength
+      }
     }
 
     private[this] val lookup: Map[(Char, Option[Char]), Glyph] = {
@@ -45,7 +42,7 @@ object Slant {
       buffer(offset + x + y * BufferRowLength).toChar
   }
 
-  private[slant] class Glyph private(offset: Int, val parent: Option[Glyph]) {
+  private[serverbanner] class Glyph private(offset: Int, val parent: Option[Glyph]) {
     def charAt(x: Int, y: Int): Char =
       Glyph.charAt(offset, x, y)
 
@@ -88,9 +85,9 @@ object Slant {
 
   def apply(text: String): String = {
     locally {
-      val disallowed = text.filterNot(AllowedChars)
+      val disallowed = text.filterNot(AllowedChars).distinct
       if (disallowed.nonEmpty) {
-        sys.error(s"Characters ${disallowed.mkString("'", "', '", "'")}")
+        sys.error(s"Characters ${disallowed.mkString("'", "', '", "'")} are disallowed - valid characters are A-Z, a-z, 0-9, underscore and hyphen")
       }
     }
 
