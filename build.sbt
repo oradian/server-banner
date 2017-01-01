@@ -1,7 +1,7 @@
 // ### BASIC SETTINGS ### //
 organization := "com.oradian.infra"
 name := "server-banner"
-version := "0.0.2"
+version := "0.0.3"
 
 unmanagedSourceDirectories in Compile := Seq((scalaSource in Compile).value)
 unmanagedSourceDirectories in Test := Seq((scalaSource in Test).value)

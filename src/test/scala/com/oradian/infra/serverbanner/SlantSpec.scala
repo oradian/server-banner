@@ -27,8 +27,8 @@ class SlantSpec extends InfraSpec {
     Slant(SortedChars.mkString) must not be 'empty
 
   def testDisallowed() =
-    Slant("Dis ? is not allowed ?!?") must throwA(
-      new RuntimeException("Characters ' ', '?', '!' are disallowed - valid characters are A-Z, a-z, 0-9, underscore and hyphen"))
+    Slant("Dis ? is not allowed ?!?") must throwA(new IllegalArgumentException(
+      "requirement failed: Characters ' ', '?', '!' are disallowed - valid characters are A-Z, a-z, 0-9, underscore and hyphen"))
 
   def testGlyphs() = Result.foreach(SortedChars) { ch =>
     val actual = Slant(new String(Array(ch)))

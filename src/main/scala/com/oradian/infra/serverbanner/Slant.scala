@@ -86,9 +86,7 @@ object Slant {
   def apply(text: String): String = {
     locally {
       val disallowed = text.filterNot(AllowedChars).distinct
-      if (disallowed.nonEmpty) {
-        sys.error(s"Characters ${disallowed.mkString("'", "', '", "'")} are disallowed - valid characters are A-Z, a-z, 0-9, underscore and hyphen")
-      }
+      require(disallowed.isEmpty, s"Characters ${disallowed.mkString("'", "', '", "'")} are disallowed - valid characters are A-Z, a-z, 0-9, underscore and hyphen")
     }
 
     val outputRowLength = text.length * Glyph.OneMaxWidth

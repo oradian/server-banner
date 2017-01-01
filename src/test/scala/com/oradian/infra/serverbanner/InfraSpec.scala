@@ -6,7 +6,7 @@ import org.specs2.Specification
 import scala.io.Source
 
 trait InfraSpec extends Specification {
-  protected lazy val logger = LoggerFactory.getLogger(getClass)
+  protected val logger = LoggerFactory.getLogger(getClass)
 
   // ### Utils ###
 
